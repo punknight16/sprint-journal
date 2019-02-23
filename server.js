@@ -2,6 +2,8 @@ var http = require('http');
 var fs = require('fs');
 var mu = require('mu2-updated');
 
+var receivePostData = require('./_models/receive-post-data');
+
 var error = function(res, err_msg){
 	displayTemplate(res, err_msg, 'error.html');
 };
@@ -38,8 +40,21 @@ var server = http.createServer(function(req, res){
 			if(req.method=='GET'){
 				return error(res, 'go register or login');
 			} else {
-				res.end('success');
+				receivePostData(req, function(err, post_obj){
+					if(err) return error(res, err);
+					switch(post_obj.form_id){
+						case 'login':
+							res.end('logged in');
+							break;
+						case 'register':
+							res.end('registered');
+							break;
+						default:
+							res.end('bad request is the home POST route');
+					}
+				});
 			}
+			break;
 		default: 
 			res.end('bad request');
 	}
