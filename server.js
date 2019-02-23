@@ -1,5 +1,18 @@
 var http = require('http');
 var fs = require('fs');
+var mu = require('mu2-updated');
+
+var error = function(res, err_msg){
+	displayTemplate(res, err_msg, 'error.html');
+};
+
+var displayTemplate = function(res, msg, template=null, args={}){
+	var template_path = "./_templates/"+template;
+	var full_args = Object.assign(args, {msg: msg});
+	var stream = mu.compileAndRender(template_path, full_args);
+	stream.pipe(res);
+}
+
 
 var server = http.createServer(function(req, res){
 	var path_params = req.url.split('/');
@@ -21,6 +34,12 @@ var server = http.createServer(function(req, res){
 			var stream = fs.createReadStream('./_pages/register.html');
 			stream.pipe(res);
 			break;
+		case 'home':
+			if(req.method=='GET'){
+				return error(res, 'go register or login');
+			} else {
+				res.end('success');
+			}
 		default: 
 			res.end('bad request');
 	}

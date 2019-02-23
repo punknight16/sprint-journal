@@ -1,0 +1,24 @@
+{
+  "name": "sprint-journal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/punknight16/sprint-journal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/punknight16/sprint-journal/issues"
+  },
+  "homepage": "https://github.com/punknight16/sprint-journal#readme",
+  "dependencies": {
+    "mu2-updated": "^0.5.21"
+  }
+}
