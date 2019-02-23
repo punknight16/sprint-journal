@@ -1,0 +1,16 @@
+--register page
+--login page
+--help page with a modal that explains the goals and translates to the badge menu (to show checked and unchecked badges)
+--first easter egg, settings menu has dark mode that adds a found dark mode badge to the badges menu
+--browse page that shows users (with badge whether they are online), intended stream time, and user retention metric
+--home page blog of your current sprint and gold received, journal articles within that sprint (with an analytic)
+		if user is SPRINT-HOST
+			open-sprint/close-sprint on far right
+			add-article/request-support on second to far right side (randomly creates stream with another online user)
+		if user is SPRINT-AUDIENCE
+			view-broadcast is on far right side
+			give-icon(with hover changing badge icon)/give-support on second to far right side
+--error page if something goes wrong
+--logout sends you to login page
+--de-activate sends you to register page
+		
