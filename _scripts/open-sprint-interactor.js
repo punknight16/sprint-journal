@@ -29,6 +29,8 @@ function openSprintInteractor(data, config, args, ext, cb){
 		err = ext.addNameObj(data, config, args, ext);
 		if(err) return cb('failed to add name_obj');
 
+		
+
 		return cb(null, {
 			badge_arr: badge_obj.badge_arr,
 			sprint_status: 'open_status',

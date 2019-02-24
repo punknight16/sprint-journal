@@ -130,6 +130,10 @@ var server = http.createServer(function(req, res){
 			var stream = fs.createReadStream('./_pages/index.html');
 			stream.pipe(res);
 			break;
+		case 'index2':
+			var stream = fs.createReadStream('./_pages/index2.html');
+			stream.pipe(res);
+			break;
 		case 'login':
 			var stream = fs.createReadStream('./_pages/login.html');
 			stream.pipe(res);
