@@ -10,6 +10,8 @@ var setDarkModeInteractor = require('./_scripts/set-dark-mode-interactor');
 var getBrowseInteractor = require('./_scripts/get-browse-interactor');
 var getHomeInteractor = require('./_scripts/get-home-interactor');
 var openSprintInteractor = require('./_scripts/open-sprint-interactor');
+var addArticleInteractor = require('./_scripts/add-article-interactor');
+var getBroadcastInteractor = require('./_scripts/get-broadcast-interactor');
 
 var error = function(res, err_msg){
 	displayTemplate(res, err_msg, 'error.html');
@@ -132,7 +134,23 @@ var server = http.createServer(function(req, res){
 			stream.pipe(res);
 			break;
 		case 'index2':
-			var stream = fs.createReadStream('./_pages/index2.html');
+			receiveCookieData(req, function(err, cookie_obj){
+				if(err) return error(res, err);
+				if(!cookie_obj.hasOwnProperty('token_id')) return error(res, 'missing auth params');
+				if(!cookie_obj.hasOwnProperty('public_token')) return error(res, 'missing auth params');
+				getBroadcastInteractor(data, config, cookie_obj, ext, function(err, confirm_args){
+					if(err) return error(res, err);
+					var stream = fs.createReadStream('./_pages/index2.html');
+					stream.pipe(res);
+				});
+			});
+			break;
+		case 'pricing':
+			var stream = fs.createReadStream('./_pages/pricing.html');
+			stream.pipe(res);
+			break;
+		case 'sprint':
+			var stream = fs.createReadStream('./_templates/sprint.html');
 			stream.pipe(res);
 			break;
 		case 'login':
@@ -282,6 +300,31 @@ var server = http.createServer(function(req, res){
 								if(!cookie_obj.hasOwnProperty('public_token')) return error(res, 'missing auth params');
 								var args = Object.assign(cookie_obj, post_obj);
 								openSprintInteractor(data, config, args, ext, function(err, confirm_args){
+									if(err) return error(res, err);
+									var test_index = confirm_args.badge_arr.findIndex((item)=>{
+										return (item.badge_id=='b5' && item.vector=='check_icon')
+									});
+									swapIdForName(data.name_data, confirm_args.badge_arr, function(err, swapped_data){
+										if(test_index!=-1){
+											confirm_args.dark = 'light';
+											confirm_args.light = 'dark';
+										} else {
+											confirm_args.dark = 'dark';
+											confirm_args.light = 'light';
+										}
+										confirm_args.badges = swapped_data;
+										displayTemplate(res, '', 'home.html', confirm_args);
+									});
+								});
+							});
+							break;
+						case 'add':
+							receiveCookieData(req, function(err, cookie_obj){
+								if(err) return error(res, err);
+								if(!cookie_obj.hasOwnProperty('token_id')) return error(res, 'missing auth params');
+								if(!cookie_obj.hasOwnProperty('public_token')) return error(res, 'missing auth params');
+								var args = Object.assign(cookie_obj, post_obj);
+								addArticleInteractor(data, config, args, ext, function(err, confirm_args){
 									if(err) return error(res, err);
 									var test_index = confirm_args.badge_arr.findIndex((item)=>{
 										return (item.badge_id=='b5' && item.vector=='check_icon')

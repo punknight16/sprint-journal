@@ -167,7 +167,7 @@ body {
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Close Sprint</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Add Article
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle='modal' data-target='#addArticleModal'>Add Article
             </button>
           </div>
           <button type="button" class="btn btn-sm btn-outline-secondary">
@@ -254,6 +254,53 @@ body {
             {{/badges}}
           </ul>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Make an update on your progress</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form class='container' action='/home' method='post'>
+          <div class="mb-3">
+            <label for="username">Article Title</label>
+            <div class="input-group">
+              <input type="text" class="form-control" name="article_title" placeholder="article_title" required>
+              <div class="invalid-feedback" style="width: 100%;">
+                Your initial article title is required.
+              </div>
+            </div>
+          </div>
+          <div class="row">
+          <div class="col-md-5 mb-3">
+            <label for="metric">Metric Key</label>
+            <input class="form-control d-block w-100" type='text' name='metric' required>
+            <div class="invalid-feedback">
+              Please provide a metric to track your growth
+            </div>
+          </div>
+          <div class="col-md-2 mb-3">
+            <label for="value">Value</label>
+            <input class="form-control d-block w-100" type='number' name='value' required>
+            <div class="invalid-feedback">
+              Please provide an initial value to show where you are starting from
+            </div>
+          </div>
+        </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Article Body</label>
+            <textarea class="form-control" name="article_body" rows="4" placeholder='write out what you have been doing according to your plan'></textarea>
+          </div>
+          <input type='hidden' name='form_id' value='add' />
+          <input class="btn btn-primary btn-lg btn-block" type='submit' value='add article to sprint' />
+        </form>
       </div>
     </div>
   </div>
