@@ -1,7 +1,7 @@
 --register page -- Done
 --login page -- Done
 --help page with a modal that explains the goals and translates to the badge menu (to show checked and unchecked badges) - done
---first easter egg, settings menu has dark mode that adds a found dark mode badge to the badges menu
+--first easter egg, settings menu has dark mode that adds a found dark mode badge to the badges menu - done
 --browse page that shows users (with badge whether they are online), intended stream time, and user retention metric
 --home page blog of your current sprint and gold received, journal articles within that sprint (with an analytic)
 		if user is SPRINT-HOST
