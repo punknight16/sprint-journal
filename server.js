@@ -7,6 +7,8 @@ var receiveCookieData = require('./_models/receive-cookie-data');
 var registerInteractor = require('./_scripts/register-interactor');
 var setDarkModeInteractor = require('./_scripts/set-dark-mode-interactor');
 var getBrowseInteractor = require('./_scripts/get-browse-interactor');
+var getHomeInteractor = require('./_scripts/get-home-interactor');
+var openSprintInteractor = require('./_scripts/open-sprint-interactor');
 
 var error = function(res, err_msg){
 	displayTemplate(res, err_msg, 'error.html');
@@ -27,9 +29,9 @@ var data = {
 		{universal_id: 'video_icon', universal_name: 'M.5 0c-.28 0-.5.23-.5.5v4c0 .28.23.5.5.5h5c.28 0 .5-.22.5-.5v-1.5l1 1h1v-3h-1l-1 1v-1.5c0-.28-.22-.5-.5-.5h-5z'},
 		{universal_id: 'audio_icon', universal_name: 'M2.91-.03a1 1 0 0 0-.13.03 1 1 0 0 0-.78 1v2a1 1 0 1 0 2 0v-2a1 1 0 0 0-1.09-1.03zm-2.56 2.03a.5.5 0 0 0-.34.5v.5c0 1.48 1.09 2.69 2.5 2.94v1.06h-.5c-.55 0-1 .45-1 1h4.01c0-.55-.45-1-1-1h-.5v-1.06c1.41-.24 2.5-1.46 2.5-2.94v-.5a.5.5 0 1 0-1 0v.5c0 1.11-.89 2-2 2-1.11 0-2-.89-2-2v-.5a.5.5 0 0 0-.59-.5.5.5 0 0 0-.06 0z'},
 		{universal_id: 'support_icon', universal_name: 'M2 0v2h-2v4h2v2h4v-2h2v-4h-2v-2h-4z'},
-		{universal_id: 'b1', universal_name: 'support-sprint'},
-		{universal_id: 'b2', universal_name: 'open-a-sprint'},
-		{universal_id: 'b3', universal_name: 'add-to-sprint'},
+		{universal_id: 'b1', universal_name: 'open-a-sprint'},
+		{universal_id: 'b2', universal_name: 'add-article'},
+		{universal_id: 'b3', universal_name: 'broadcast-progress'},
 		{universal_id: 'b4', universal_name: 'close-sprint'},
 		{universal_id: 'b5', universal_name: 'dark-mode'},
 		{universal_id: 'c1', universal_name: 'punknight'},
@@ -212,22 +214,22 @@ var server = http.createServer(function(req, res){
 							return (item.badge_id=='b5' && item.vector=='check_icon')
 						});
 						swapIdForName(data.name_data, confirm_args.badge_arr, function(err, swapped_data){
-						if(test_index!=-1){
-							confirm_args.dark = 'light';
-							confirm_args.light = 'dark';
-						} else {
-							confirm_args.dark = 'dark';
-							confirm_args.light = 'light';
-						}
-						confirm_args.badges = swapped_data;
-						if(typeof confirm_args.sprint_status == 'undefined' || confirm_args.sprint_status=='closed'){
-							displayTemplate(res, '', 'open.html', confirm_args);
-						} else {
-							displayTemplate(res, '', 'home.html', confirm_args);
-						}
+							if(test_index!=-1){
+								confirm_args.dark = 'light';
+								confirm_args.light = 'dark';
+							} else {
+								confirm_args.dark = 'dark';
+								confirm_args.light = 'light';
+							}
+							confirm_args.badges = swapped_data;
+							if(typeof confirm_args.sprint_status == 'undefined' || confirm_args.sprint_status=='closed'){
+								displayTemplate(res, '', 'open.html', confirm_args);
+							} else {
+								displayTemplate(res, '', 'home.html', confirm_args);
+							}
+						});
 					});
 				});
-				break;
 			} else {
 				receivePostData(req, function(err, post_obj){
 					if(err) return error(res, err);
@@ -258,6 +260,30 @@ var server = http.createServer(function(req, res){
 									}
 									confirm_args.badges = swapped_data;
 									displayTemplate(res, 'Registration Successful', 'badge.html', confirm_args);
+								});
+							});
+							break;
+						case 'open':
+							receiveCookieData(req, function(err, cookie_obj){
+								if(err) return error(res, err);
+								if(!cookie_obj.hasOwnProperty('token_id')) return error(res, 'missing auth params');
+								if(!cookie_obj.hasOwnProperty('public_token')) return error(res, 'missing auth params');
+								openSprintInteractor(data, config, cookie_obj, ext, function(err, confirm_args){
+									if(err) return error(res, err);
+									var test_index = confirm_args.badge_arr.findIndex((item)=>{
+										return (item.badge_id=='b5' && item.vector=='check_icon')
+									});
+									swapIdForName(data.name_data, confirm_args.badge_arr, function(err, swapped_data){
+										if(test_index!=-1){
+											confirm_args.dark = 'light';
+											confirm_args.light = 'dark';
+										} else {
+											confirm_args.dark = 'dark';
+											confirm_args.light = 'light';
+										}
+										confirm_args.badges = swapped_data;
+										displayTemplate(res, '', 'home.html', confirm_args);
+									});
 								});
 							});
 							break;

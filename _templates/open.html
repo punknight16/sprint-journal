@@ -167,7 +167,7 @@ body {
     
     <div class="col-md-8 order-md-1">
       <h4 class="mb-3">Sprint Heading</h4>
-      <form class="needs-validation" novalidate>
+      <form action='/home' method='post'>
         <div class="mb-3">
           <label for="username">Sprint Title</label>
           <div class="input-group">
@@ -246,6 +246,7 @@ body {
             <label for="exampleFormControlTextarea1">Article Body</label>
             <textarea class="form-control" name="article_body" rows="4" placeholder='write out your plan'></textarea>
           </div>
+        <input type='hidden' name='form_id' value='open' />
         <button class="btn btn-primary btn-lg btn-block" type="submit">Open This Sprint</button>
       </form>
     </div>
