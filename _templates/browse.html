@@ -121,7 +121,7 @@ body {
             <a class="nav-link active" href="/browse">Browse<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/pricing">Buy Gold!</a>
+            <a class="nav-link" href="/pricing">Show Support!</a>
           </li>
         </ul>
         
@@ -160,7 +160,7 @@ body {
 				  	<tr style="border-bottom: 2px solid #dee2e6">
 				    	<th class="border-bottom-0">Users</th>
               <th class="border-bottom-0">Sprint</th>
-              <th class="d-flex justify-content-end border-bottom-0">Retention Metric</th>
+              <th class="d-flex justify-content-end border-bottom-0">Gold</th>
 				  	</tr>
 				  </thead>
 				  <tbody>
@@ -170,7 +170,11 @@ body {
                   <path d="{{status_id}}" />
                 </svg>&nbsp;<a href='#'>{{cred_id}}</a></td>
                 <td><a href='#'>{{sprint_id}}</a></td>
-                <td class='d-flex justify-content-end'>{{retention_metric}}
+                <td class='d-flex justify-content-end'>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 -3 9 9" fill='{{dark}}gray'>
+                    <path d="{{gold_icon}}" />
+                  </svg>
+                  <span class='text-{{dark}}'> {{gold_value}}</span>
   					  </tr>
 					  {{/Objects}}
 					</tbody>

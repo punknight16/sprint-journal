@@ -10,6 +10,7 @@ function receivePostData (req, cb){
 			return cb('no post data');
 		} else if (post_str.indexOf('=')>0){	
 			post_str = post_str.replace(/%40/g, "@");
+			post_str = post_str.replace(/\+/g, " ");
 			var post_arr = post_str.split('&');
 			post_arr.map((item)=>{
 				var parse = item.split('=');

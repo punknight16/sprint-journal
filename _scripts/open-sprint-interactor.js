@@ -1,5 +1,10 @@
 function openSprintInteractor(data, config, args, ext, cb){
 	var err;
+	args.engagement_id = ext.generateId(data.universal_data, 'engagement-', 10);
+	if(typeof args.engagement_id == 'undefined') return cb('no engagement_id');
+	args.sprint_id = ext.generateId(data.universal_data, 'sprint-', 10);
+	if(typeof args.sprint_id == 'undefined') return cb('no sprint_id');
+
 	ext.authorizeRequest(data, config, args, ext, function(err, cred_id){
 		if(err) return cb(err);
 		args.cred_id = cred_id;
@@ -16,9 +21,18 @@ function openSprintInteractor(data, config, args, ext, cb){
 		err = ext.editBadgeObj(data.badge_data, cred_id, badge_obj, ext.editObj);
 		if(err) return cb('couldn\'t add dark-mode');
 
+		err = ext.addSprintObj(data, config, args, ext);
+		if(err) return cb('couldn\'t add sprint_obj');
+
+		args.universal_id = args.sprint_id;
+		args.universal_name = args.sprint_title;
+		err = ext.addNameObj(data, config, args, ext);
+		if(err) return cb('failed to add name_obj');
 
 		return cb(null, {
-			badge_arr: badge_obj.badge_arr
+			badge_arr: badge_obj.badge_arr,
+			sprint_status: 'open_status',
+			sprint_title: args.sprint_title
 		});
 	});
 }

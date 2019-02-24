@@ -29,6 +29,7 @@ var data = {
 		{universal_id: 'video_icon', universal_name: 'M.5 0c-.28 0-.5.23-.5.5v4c0 .28.23.5.5.5h5c.28 0 .5-.22.5-.5v-1.5l1 1h1v-3h-1l-1 1v-1.5c0-.28-.22-.5-.5-.5h-5z'},
 		{universal_id: 'audio_icon', universal_name: 'M2.91-.03a1 1 0 0 0-.13.03 1 1 0 0 0-.78 1v2a1 1 0 1 0 2 0v-2a1 1 0 0 0-1.09-1.03zm-2.56 2.03a.5.5 0 0 0-.34.5v.5c0 1.48 1.09 2.69 2.5 2.94v1.06h-.5c-.55 0-1 .45-1 1h4.01c0-.55-.45-1-1-1h-.5v-1.06c1.41-.24 2.5-1.46 2.5-2.94v-.5a.5.5 0 1 0-1 0v.5c0 1.11-.89 2-2 2-1.11 0-2-.89-2-2v-.5a.5.5 0 0 0-.59-.5.5.5 0 0 0-.06 0z'},
 		{universal_id: 'support_icon', universal_name: 'M2 0v2h-2v4h2v2h4v-2h2v-4h-2v-2h-4z'},
+		{universal_id: 'heart_icon', universal_name: 'M2 0c-.55 0-1.04.23-1.41.59-.36.36-.59.85-.59 1.41 0 .55.23 1.04.59 1.41l3.41 3.41 3.41-3.41c.36-.36.59-.85.59-1.41 0-.55-.23-1.04-.59-1.41-.36-.36-.85-.59-1.41-.59-.55 0-1.04.23-1.41.59-.36.36-.59.85-.59 1.41 0-.55-.23-1.04-.59-1.41-.36-.36-.85-.59-1.41-.59z'},
 		{universal_id: 'b1', universal_name: 'open-a-sprint'},
 		{universal_id: 'b2', universal_name: 'add-article'},
 		{universal_id: 'b3', universal_name: 'broadcast-progress'},
@@ -69,20 +70,20 @@ var data = {
 	engagement_data: [],
 	badge_data: [],
 	sprint_data: [
-		{status_id: '', cred_id: 'c1', sprint_id:'s1', retention_metric: .2345},
-		{status_id: 'broadcast_icon', cred_id: 'c2', sprint_id:'s2', retention_metric: .2345},
-		{status_id: 'video_icon', cred_id: 'c3', sprint_id:'s3', retention_metric: .2345},
-		{status_id: '', cred_id: 'c4', sprint_id:'s4', retention_metric: .2345},
-		{status_id: '', cred_id: 'c5', sprint_id:'s5', retention_metric: .2345},
-		{status_id: '', cred_id: 'c6', sprint_id:'s6', retention_metric: .2345},
-		{status_id: '', cred_id: 'c7', sprint_id:'s7', retention_metric: .2345},
-		{status_id: '', cred_id: 'c8', sprint_id:'s8', retention_metric: .2345},
-		{status_id: '', cred_id: 'c9', sprint_id:'s9', retention_metric: .2345},
-		{status_id: '', cred_id: 'c10', sprint_id:'s10', retention_metric: .2345},
-		{status_id: '', cred_id: 'c11', sprint_id:'s11', retention_metric: .2345},
-		{status_id: '', cred_id: 'c12', sprint_id:'s12', retention_metric: .2345},
-		{status_id: '', cred_id: 'c13', sprint_id:'s13', retention_metric: .2345},
-		{status_id: '', cred_id: 'c14', sprint_id:'s14', retention_metric: .2345},
+		{status_id: '', cred_id: 'c1', sprint_id:'s1', gold_icon: '', gold_value: ''},
+		{status_id: 'broadcast_icon', cred_id: 'c2', sprint_id:'s2', gold_icon: '', gold_value: ''},
+		{status_id: 'broadcast_icon', cred_id: 'c3', sprint_id:'s3', gold_icon: '', gold_value: ''},
+		{status_id: '', cred_id: 'c4', sprint_id:'s4', gold_icon: '', gold_value: ''},
+		{status_id: '', cred_id: 'c5', sprint_id:'s5', gold_icon: '', gold_value: ''},
+		{status_id: '', cred_id: 'c6', sprint_id:'s6', gold_icon: 'heart_icon', gold_value: 2},
+		{status_id: '', cred_id: 'c7', sprint_id:'s7', gold_icon: '', gold_value: ''},
+		{status_id: '', cred_id: 'c8', sprint_id:'s8', gold_icon: '', gold_value: ''},
+		{status_id: '', cred_id: 'c9', sprint_id:'s9', gold_icon: 'heart_icon', gold_value: 4},
+		{status_id: '', cred_id: 'c10', sprint_id:'s10', gold_icon: '', gold_value: ''},
+		{status_id: '', cred_id: 'c11', sprint_id:'s11', gold_icon: '', gold_value: ''},
+		{status_id: '', cred_id: 'c12', sprint_id:'s12', gold_icon: 'heart_icon', gold_value: 2},
+		{status_id: '', cred_id: 'c13', sprint_id:'s13', gold_icon: '', gold_value: ''},
+		{status_id: '', cred_id: 'c14', sprint_id:'s14', gold_icon: '', gold_value: ''},
 	]
 };
 
@@ -114,6 +115,8 @@ ext.authorizeRequest = require('./_models/authorize-request');
 ext.getTokenObj = require('./_scripts/get-token-obj');
 ext.compareKeys = require('./_models/compare-keys');
 ext.listSprintObj = require('./_scripts/list-sprint-obj');
+ext.addSprintObj = require('./_scripts/add-sprint-obj');
+ext.getNameObj = require('./_scripts/get-name-obj');
 
 var server = http.createServer(function(req, res){
 	var path_params = req.url.split('/');
@@ -210,6 +213,7 @@ var server = http.createServer(function(req, res){
 					if(!cookie_obj.hasOwnProperty('public_token')) return error(res, 'missing auth params');
 					getHomeInteractor(data, config, cookie_obj, ext, function(err, confirm_args){
 						if(err) return error(res, err);
+						console.log('confirm_args: ', confirm_args);
 						var test_index = confirm_args.badge_arr.findIndex((item)=>{
 							return (item.badge_id=='b5' && item.vector=='check_icon')
 						});
@@ -222,7 +226,9 @@ var server = http.createServer(function(req, res){
 								confirm_args.light = 'light';
 							}
 							confirm_args.badges = swapped_data;
-							if(typeof confirm_args.sprint_status == 'undefined' || confirm_args.sprint_status=='closed'){
+							console.log('confirm_args.sprint_title: ', confirm_args.sprint_title);
+							confirm_args.sprint_title = confirm_args.sprint_title;
+							if(typeof confirm_args.sprint_status == 'undefined' || confirm_args.sprint_status=='closed_status'){
 								displayTemplate(res, '', 'open.html', confirm_args);
 							} else {
 								displayTemplate(res, '', 'home.html', confirm_args);
@@ -264,11 +270,13 @@ var server = http.createServer(function(req, res){
 							});
 							break;
 						case 'open':
+							if(!post_obj.hasOwnProperty('sprint_title')) return error(res, 'missing sprint params');
 							receiveCookieData(req, function(err, cookie_obj){
 								if(err) return error(res, err);
 								if(!cookie_obj.hasOwnProperty('token_id')) return error(res, 'missing auth params');
 								if(!cookie_obj.hasOwnProperty('public_token')) return error(res, 'missing auth params');
-								openSprintInteractor(data, config, cookie_obj, ext, function(err, confirm_args){
+								var args = Object.assign(cookie_obj, post_obj);
+								openSprintInteractor(data, config, args, ext, function(err, confirm_args){
 									if(err) return error(res, err);
 									var test_index = confirm_args.badge_arr.findIndex((item)=>{
 										return (item.badge_id=='b5' && item.vector=='check_icon')
