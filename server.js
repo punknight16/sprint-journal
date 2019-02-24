@@ -133,6 +133,10 @@ var server = http.createServer(function(req, res){
 			var stream = fs.createReadStream('./_pages/index.html');
 			stream.pipe(res);
 			break;
+		case 'index3':
+			var stream = fs.createReadStream('./_pages/index3.html');
+			stream.pipe(res);
+			break;
 		case 'index2':
 			receiveCookieData(req, function(err, cookie_obj){
 				if(err) return error(res, err);
