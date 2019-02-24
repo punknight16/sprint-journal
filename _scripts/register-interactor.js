@@ -22,8 +22,15 @@ function registerInteractor(data, config, args, ext, cb){
 	var token_obj = ext.addTokenObj(data, config, args, ext);
 	if(typeof token_obj == 'undefined') return cb('couldn\'t generate token_obj');
 	
+	err = ext.addBadgeObj(data, config, args, ext);
+	if(err) return cb('failed to add engagement');
+	
+	var badge_obj = ext.getBadgeObj(data.badge_data, args.cred_id, ext.getObj);
+	if(typeof badge_obj == 'undefined') return cb('couldn\'t generate badge_obj');
+
 	return cb(null, {
-		token_obj: token_obj
+		token_obj: token_obj,
+		badge_arr: badge_obj.badge_arr
 	});
 }
 

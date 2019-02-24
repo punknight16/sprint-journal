@@ -142,7 +142,7 @@ body {
         
         <div class="form-inline my-2 my-lg-0" >
           <button id='?' class="btn btn-outline-secondary my-2 my-sm-0 mr-sm-2 custom"
-          data-toggle='modal' data-target='#badgeModal'>?</button>
+          data-toggle='modal' data-target='#badgeModal' onclick="removeFlasher()">?</button>
         </div>
         <div class="form-inline my-2 my-lg-0">
           <button class="btn btn-outline-secondary my-2 my-sm-0 mr-sm-2 custom"  data-toggle="dropdown">
@@ -191,7 +191,7 @@ body {
             </span>&nbsp;close-a-sprint</li>
           </ul>
         </div>
-        <a class="btn btn-outline-secondary" href="/browse">Get Started...</a>
+        <a class="btn btn-outline-secondary" href="/browse">Ready to get started...</a>
       </div>
       
     </main>
@@ -248,7 +248,7 @@ body {
               <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="whitesmoke">
                 <path d="{{vector}}" transform="translate(0 1)" />
               </svg>
-            </span>&nbsp;{{name}}</li>
+            </span>&nbsp;{{badge_id}}</li>
             {{/badges}}
           </ul>
         </div>
@@ -258,10 +258,16 @@ body {
 <body>
 
   <script>
-    setInterval(function(){
+    var flasher = setInterval(function(){
       document.getElementById("?").classList.toggle('text-warning');
       document.getElementById("?").classList.toggle('border-warning');
     }, 1000);
+
+    function removeFlasher(){
+      clearInterval(flasher);
+       document.getElementById("?").classList.remove('text-warning');
+       document.getElementById("?").classList.remove('border-warning');
+    }
     
   </script> 
 </html>
