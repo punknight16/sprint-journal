@@ -3,7 +3,9 @@ var fs = require('fs');
 var mu = require('mu2-updated');
 
 var receivePostData = require('./_models/receive-post-data');
+var receiveCookieData = require('./_models/receive-cookie-data');
 var registerInteractor = require('./_scripts/register-interactor');
+var setDarkModeInteractor = require('./_scripts/set-dark-mode-interactor');
 
 var error = function(res, err_msg){
 	displayTemplate(res, err_msg, 'error.html');
@@ -28,14 +30,7 @@ var data = {
 	],
 	cred_data: [],
 	engagement_data: [],
-	badge_data: [
-		{cred_id: 'c1', badges: [
-			{vector: '', badge_id: 'b1'},
-			{vector: '', badge_id: 'b2'},
-			{vector: '', badge_id: 'b3'},
-			{vector: '', badge_id: 'b4'}
-		]}
-	]
+	badge_data: []
 };
 
 var config = {
@@ -48,6 +43,7 @@ var ext = {};
 ext.generateId = require('./_models/generate-id');
 ext.addObj = require('./_models/add-obj');
 ext.getObj = require('./_models/get-obj');
+ext.editObj = require('./_models/edit-obj');
 ext.addCredObj = require('./_scripts/add-cred-obj');
 ext.addNameObj = require('./_scripts/add-name-obj');
 ext.addEngagementObj = require('./_scripts/add-engagement-obj');
@@ -59,8 +55,10 @@ ext.cypher = require('./_models/cypher').cypher;
 ext.decypher = require('./_models/cypher').decypher;
 ext.addBadgeObj = require('./_scripts/add-badge-obj');
 ext.getBadgeObj = require('./_scripts/get-badge-obj');
-
-
+ext.editBadgeObj = require('./_scripts/edit-badge-obj');
+ext.authorizeRequest = require('./_models/authorize-request');
+ext.getTokenObj = require('./_scripts/get-token-obj');
+ext.compareKeys = require('./_models/compare-keys');
 var server = http.createServer(function(req, res){
 	var path_params = req.url.split('/');
 	var path = path_params[1].split('?');
@@ -81,6 +79,33 @@ var server = http.createServer(function(req, res){
 			var stream = fs.createReadStream('./_pages/register.html');
 			stream.pipe(res);
 			break;
+
+		case 'easter-egg':
+			receiveCookieData(req, function(err, cookie_obj){
+				if(err) return error(res, err);
+				if(!cookie_obj.hasOwnProperty('token_id')) return error(res, 'missing auth params');
+				if(!cookie_obj.hasOwnProperty('public_token')) return error(res, 'missing auth params');
+				setDarkModeInteractor(data, config, cookie_obj, ext, function(err, confirm_args){
+					if(err) return error(res, err);
+					
+					confirm_args.cookie_script = '';
+					var test_index = confirm_args.badge_arr.findIndex((item)=>{
+						return (item.badge_id=='b5' && item.vector=='check_icon')
+					});
+					swapIdForName(data.name_data, confirm_args.badge_arr, function(err, swapped_data){
+						if(test_index!=-1){
+							confirm_args.dark = 'light';
+							confirm_args.light = 'dark';
+						} else {
+							confirm_args.dark = 'dark';
+							confirm_args.light = 'light';
+						}
+						confirm_args.badges = swapped_data;
+						displayTemplate(res, 'dark-mode changed', 'badge.html', confirm_args);
+					});
+				});
+			});
+			break;
 		case 'home':
 			if(req.method=='GET'){
 				return error(res, 'go register or login');
@@ -100,8 +125,18 @@ var server = http.createServer(function(req, res){
 								if(err) return error(res, err);
 								var token_str = confirm_args.token_obj.token_id+'.'+confirm_args.token_obj.public_token+'.'+confirm_args.token_obj.cred_id;
 								confirm_args.cookie_script = 'document.cookie = "token='+token_str+'; path=/";';
+								var test_index = confirm_args.badge_arr.findIndex((item)=>{
+									return (item.badge_id=='b5' && item.vector=='check_icon')
+								});
+								
 								swapIdForName(data.name_data, confirm_args.badge_arr, function(err, swapped_data){
-									
+									if(test_index!=-1){
+										confirm_args.dark = 'light';
+										confirm_args.light = 'dark';
+									} else {
+										confirm_args.dark = 'dark';
+										confirm_args.light = 'light';
+									}
 									confirm_args.badges = swapped_data;
 									displayTemplate(res, 'Registration Successful', 'badge.html', confirm_args);
 								});
