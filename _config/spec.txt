@@ -1,5 +1,5 @@
---register page
---login page
+--register page -- Done
+--login page -- Done
 --help page with a modal that explains the goals and translates to the badge menu (to show checked and unchecked badges)
 --first easter egg, settings menu has dark mode that adds a found dark mode badge to the badges menu
 --browse page that shows users (with badge whether they are online), intended stream time, and user retention metric

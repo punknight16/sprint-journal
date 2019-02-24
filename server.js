@@ -15,6 +15,32 @@ var displayTemplate = function(res, msg, template=null, args={}){
 	stream.pipe(res);
 }
 
+var data = {
+	universal_data: [],
+	name_data: [],
+	cred_data: []
+};
+
+var config = {
+	pass_secret: require('./_config/cred.js').pass_secret,
+	token_secret: require('./_config/cred.js').token_secret,
+	last_engagement_arr: [],
+	token_arr: []
+};
+var ext = {
+	ext.generateId = require('./_models/generate-id');
+	ext.addObj = require('./_models/add-obj');
+	ext.addCredObj = require('./_scripts/add-cred-obj');
+	ext.addNameObj = require('./_scripts/add-name-obj');
+	ext.addEngagementObj = require('./_scripts/add-engagement-obj');
+	ext.addTokenObj = require('./_scripts/add-token-obj');
+	ext.encryptPassword = require('./_models/encrypt').encryptPassword;
+	ext.compareCreds = require('./_models/encrypt').compareCreds;
+	ext.crypto = require('crypto');
+	ext.cypher = require('./_models/cypher').cypher;
+	ext.decypher = require('./_models/cypher').decypher;
+};
+
 
 var server = http.createServer(function(req, res){
 	var path_params = req.url.split('/');
@@ -47,7 +73,15 @@ var server = http.createServer(function(req, res){
 							res.end('logged in');
 							break;
 						case 'register':
-							res.end('registered');
+							if(!post_obj.hasOwnProperty('username') || 
+								!post_obj.hasOwnProperty('email') ||
+								!post_obj.hasOwnProperty('password')) return error(res, 'missing register params');
+							registerInteractor(data, config, post_obj, ext, function(err, args){
+								if(err) return error(res, err);
+								var token_str = args.token_obj.token_id+'.'+args.token_obj.public_token+'.'+args.token_obj.cred_id;
+								args.cookie_script = 'document.cookie = "token='+token_str+'; path=/";';
+								displayTemplate(res, 'Registration Successful', 'badge.html', args);
+							});
 							break;
 						default:
 							res.end('bad request is the home POST route');
