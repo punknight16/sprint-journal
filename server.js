@@ -202,7 +202,32 @@ var server = http.createServer(function(req, res){
 			break;
 		case 'home':
 			if(req.method=='GET'){
-				return error(res, 'go register or login');
+				receiveCookieData(req, function(err, cookie_obj){
+					if(err) return error(res, err);
+					if(!cookie_obj.hasOwnProperty('token_id')) return error(res, 'missing auth params');
+					if(!cookie_obj.hasOwnProperty('public_token')) return error(res, 'missing auth params');
+					getHomeInteractor(data, config, cookie_obj, ext, function(err, confirm_args){
+						if(err) return error(res, err);
+						var test_index = confirm_args.badge_arr.findIndex((item)=>{
+							return (item.badge_id=='b5' && item.vector=='check_icon')
+						});
+						swapIdForName(data.name_data, confirm_args.badge_arr, function(err, swapped_data){
+						if(test_index!=-1){
+							confirm_args.dark = 'light';
+							confirm_args.light = 'dark';
+						} else {
+							confirm_args.dark = 'dark';
+							confirm_args.light = 'light';
+						}
+						confirm_args.badges = swapped_data;
+						if(typeof confirm_args.sprint_status == 'undefined' || confirm_args.sprint_status=='closed'){
+							displayTemplate(res, '', 'open.html', confirm_args);
+						} else {
+							displayTemplate(res, '', 'home.html', confirm_args);
+						}
+					});
+				});
+				break;
 			} else {
 				receivePostData(req, function(err, post_obj){
 					if(err) return error(res, err);

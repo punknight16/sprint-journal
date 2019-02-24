@@ -41,6 +41,11 @@ body {
     transform: translateX(-1rem); /* Account for horizontal padding on navbar */
   }
 }
+@media (min-width: 800px) {
+  .custom-container {
+    width: 600px;
+  }
+}
 
 .nav-scroller {
   position: relative;
@@ -101,7 +106,6 @@ body {
 
 
 
-
   /*
    * Footer
    */
@@ -127,8 +131,8 @@ body {
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/home">Home</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/home">Home<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/browse">Browse</a>
@@ -157,41 +161,41 @@ body {
       </div>
     </nav>
 
-    <main class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-{{light}} text-{{dark}}">
-      
-      
-      <div class="col-md-5 p-lg-5 mx-auto my-5">
-        <h3 class="display-4 font-weight-normal">Live Demo</h3>
-        <p class="lead font-weight-normal">
-          Try out this <strong><i>live demo</i></strong> by lookin for the buttons below. If at anytime you forget, just hit the question (?) button in the menu on the top right.
-        </p>
-        <div class='d-flex justify-content-center' style='margin-left: -30px'>
-          <ul class='text-left'>
-            <li><span class="badge badge-secondary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="whitesmoke">
-                <path d="M6.41 0l-.69.72-2.78 2.78-.81-.78-.72-.72-1.41 1.41.72.72 1.5 1.5.69.72.72-.72 3.5-3.5.72-.72-1.44-1.41z" transform="translate(0 1)" />
-              </svg>
-            </span>&nbsp;open a sprint</li>
-            <li><span class="badge badge-secondary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="whitesmoke">
-                <path d="M6.41 0l-.69.72-2.78 2.78-.81-.78-.72-.72-1.41 1.41.72.72 1.5 1.5.69.72.72-.72 3.5-3.5.72-.72-1.44-1.41z" transform="translate(0 1)" />
-              </svg>
-            </span>&nbsp;add article to sprint</li>
-            <li><span class="badge badge-secondary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="whitesmoke">
-                <path d="M6.41 0l-.69.72-2.78 2.78-.81-.78-.72-.72-1.41 1.41.72.72 1.5 1.5.69.72.72-.72 3.5-3.5.72-.72-1.44-1.41z" transform="translate(0 1)" />
-              </svg>
-            </span>&nbsp;broadcast progress</li>
-            <li><span class="badge badge-secondary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="whitesmoke">
-                <path d="M6.41 0l-.69.72-2.78 2.78-.81-.78-.72-.72-1.41 1.41.72.72 1.5 1.5.69.72.72-.72 3.5-3.5.72-.72-1.44-1.41z" transform="translate(0 1)" />
-              </svg>
-            </span>&nbsp;close a sprint</li>
-          </ul>
+    <main role="main" class="container">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h1">Dashboard</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Close Sprint</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Add Article
+            </button>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary">
+            Broadcast
+              <span class="badge badge-secondary">3</span>
+          </button>
         </div>
-        <a class="btn btn-outline-secondary" href="/browse">Ready to browse...</a>
       </div>
-      
+      <div class="blog-post custom-container">
+        
+          <h3 class="blog-post-title h3">Sample blog post</h3>
+          
+        
+        <div class='d-flex justify-content-between'>
+          <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+          <div class='d-flex'>
+            <span>Metric:</span>
+            <span>Value</span>
+          </div>
+        </div>
+        <hr class='mt-0'>
+        <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
+        <blockquote>
+          <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+        </blockquote>
+        <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+        
+      </div><!-- /.blog-post -->
     </main>
 
    <footer class="footer">
@@ -254,18 +258,4 @@ body {
     </div>
   </div>
 <body>
-
-  <script>
-    var flasher = setInterval(function(){
-      document.getElementById("?").classList.toggle('text-warning');
-      document.getElementById("?").classList.toggle('border-warning');
-    }, 1000);
-
-    function removeFlasher(){
-      clearInterval(flasher);
-       document.getElementById("?").classList.remove('text-warning');
-       document.getElementById("?").classList.remove('border-warning');
-    }
-    
-  </script> 
 </html>
